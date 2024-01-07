@@ -11,6 +11,8 @@ if __name__ == '__main__':
     queue.enqueue('data2')
     queue.enqueue('data3')
 
+    print(queue.head.data)
+
     # Проверяем очередность хранения данных
     assert queue.head.data == 'data1'
     assert queue.head.next_node.data == 'data2'
