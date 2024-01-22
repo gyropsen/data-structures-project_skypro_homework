@@ -1,14 +1,14 @@
 class Node:
     """Класс для узла очереди"""
 
-    def __init__(self, data):
+    def __init__(self, data, next_node):
         """
         Конструктор класса Node
 
         :param data: данные, которые будут храниться в узле
         """
         self.data = data
-        self.next_node = None
+        self.next_node = next_node
 
 
 class Queue:
@@ -18,10 +18,6 @@ class Queue:
         """Конструктор класса Queue"""
         self.head = None
         self.tail = None
-        self.length = []
-
-    def is_empty(self):
-        return len(self.length) == 0
 
     def enqueue(self, data):
         """
@@ -29,16 +25,11 @@ class Queue:
 
         :param data: данные, которые будут добавлены в очередь
         """
-        node = Node(data)
-
-        if self.is_empty():
-            self.head = self.tail = node
-
-        else:
-            tail = self.tail
-            tail.next_node = node
-            self.tail = node
-        self.length.append(data)
+        if self.head is None or self.tail is None:
+            self.tail = self.head = Node(data, None)
+            return
+        self.tail.next_node = Node(data, None)
+        self.tail = self.tail.next_node
 
     def dequeue(self):
         """
@@ -46,17 +37,20 @@ class Queue:
 
         :return: данные удаленного элемента
         """
-        if self.is_empty():
-            return
-        data = self.head.data
+        if self.head is None:
+            return None
+        removed_data = self.head.data
         self.head = self.head.next_node
-        self.length.pop()
-        if self.is_empty():
+        if self.head is None:
             self.tail = None
-        return data
+        return removed_data
 
     def __str__(self):
         """Магический метод для строкового представления объекта"""
-        if self.is_empty():
-            return ""
-        return f"{"\n".join(self.length)}"
+        head = self.head
+        data = []
+        while head:
+            if head.data:
+                data.append(head.data)
+                head = head.next_node
+        return "\n".join(data)
